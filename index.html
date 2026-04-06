@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Keyboard Rearrange Game</title>
+<style>
+  body {
+    font-family: Arial;
+    text-align: center;
+    background: #f4f4f4;
+  }
+
+  h2 {
+    margin-top: 20px;
+  }
+
+  #game, #answer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px;
+    min-height: 60px;
+  }
+
+  .key {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    background: #3498db;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+
+  .key:hover {
+    background: #2980b9;
+  }
+
+  #answer .key {
+    background: #2ecc71;
+    cursor: default;
+  }
+
+  button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<h2>Keyboard Rearranging Game</h2>
+<p>Click keys in the correct keyboard order!</p>
+
+<div id="game"></div>
+
+<h3>Your Answer:</h3>
+<div id="answer"></div>
+
+<p id="result"></p>
+
+<button onclick="startGame()">Restart</button>
+
+<script>
+const correctOrder = [
+  "`","1","2","3","4","5","6","7","8","9","0","-","=",
+  "Q","W","E","R","T","Y","U","I","O","P",
+  "A","S","D","F","G","H","J","K","L",
+  "Z","X","C","V","B","N","M"
+];
+
+let shuffled = [];
+let currentIndex = 0;
+
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+function startGame() {
+  const gameDiv = document.getElementById("game");
+  const answerDiv = document.getElementById("answer");
+  const result = document.getElementById("result");
+
+  gameDiv.innerHTML = "";
+  answerDiv.innerHTML = "";
+  result.innerText = "";
+
+  shuffled = shuffle([...correctOrder]);
+  currentIndex = 0;
+
+  shuffled.forEach(key => {
+    const div = document.createElement("div");
+    div.className = "key";
+    div.innerText = key;
+
+    div.onclick = () => checkKey(key, div);
+
+    gameDiv.appendChild(div);
+  });
+}
+
+function checkKey(key, element) {
+  if (key === correctOrder[currentIndex]) {
+    element.style.visibility = "hidden";
+
+    const answerDiv = document.getElementById("answer");
+    const newKey = document.createElement("div");
+    newKey.className = "key";
+    newKey.innerText = key;
+
+    answerDiv.appendChild(newKey);
+
+    currentIndex++;
+
+    if (currentIndex === correctOrder.length) {
+      document.getElementById("result").innerText = "🎉 You Win!";
+    }
+  } else {
+    document.getElementById("result").innerText = "❌ Wrong key! Try again.";
+  }
+}
+
+startGame();
+</script>
+
+</body>
+</html>
